@@ -1,0 +1,10 @@
+calculator
+*.exe
+
+*.o
+
+*~
+*.bak
+*.swp
+
+build/
