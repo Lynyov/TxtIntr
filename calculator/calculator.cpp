@@ -24,20 +24,35 @@ double subtract(const vector<double>& operands) {
 
 // Функция для вывода справки
 void printHelp() {
-    cout << "  --operation summa ОПЕРАНД1 ОПЕРАНД2 ОПЕРАНД3 ОПЕРАНД4 ОПЕРАНД5 [ОПЕРАНД6] [ОПЕРАНД7]\n";
-    cout << "  --operation subtract ОПЕРАНД1 ОПЕРАНД2 ОПЕРАНД3 ОПЕРАНД4 ОПЕРАНД5 [ОПЕРАНД6] [ОПЕРАНД7]\n";
-    cout << "  -o summa ОПЕРАНД1 ОПЕРАНД2 ОПЕРАНД3 ОПЕРАНД4 ОПЕРАНД5 [ОПЕРАНД6] [ОПЕРАНД7]\n";
-    cout << "  -o subtract ОПЕРАНД1 ОПЕРАНД2 ОПЕРАНД3 ОПЕРАНД4 ОПЕРАНД5 [ОПЕРАНД6] [ОПЕРАНД7]\n\n";
+    cout << "Использование:\n";
+    cout << "  calculator [ОПЦИИ] ОПЕРАНД1 ОПЕРАНД2 ОПЕРАНД3 ОПЕРАНД4 ОПЕРАНД5 [ОПЕРАНД6] [ОПЕРАНД7]\n\n";
+    cout << "Опции:\n";
+    cout << "  -h, --help              Показать эту справку и выйти\n";
+    cout << "  -o, --operation OPERATION  Выполнить операцию (summa/subtract)\n\n";
+    cout << "Операции:\n";
+    cout << "  summa                   Суммирование всех операндов\n";
+    cout << "  subtract                Вычитание (из первого операнда всех остальных)\n\n";
     cout << "Требования:\n";
     cout << "  - Количество операндов: от 5 до 7\n";
-    cout << "  - Поддерживаемые операции: summa (суммирование), subtract (вычитание)\n\n";
+    cout << "  - Все операнды должны быть числами\n\n";
     cout << "Примеры:\n";
     cout << "  calculator -o summa 1 2 3 4 5\n";
     cout << "  calculator --operation subtract 100 10 5 2 1 2\n";
     cout << "  calculator -o summa 1.5 2.5 3.5 4.5 5.5 6.5 7.5\n";
+    cout << "  calculator -h\n";
+    cout << "  calculator --help\n";
 }
 
 int main(int argc, char* argv[]) {
+    // Проверка на запрос справки
+    if (argc == 2) {
+        string arg = argv[1];
+        if (arg == "-h" || arg == "--help") {
+            printHelp();
+            return 0;
+        }
+    }
+
     // Проверка на отсутствие параметров
     if (argc == 1) {
         printHelp();
@@ -58,6 +73,9 @@ int main(int argc, char* argv[]) {
                 cerr << "Ошибка: отсутствует значение для " << arg << endl;
                 return 1;
             }
+        } else if (arg == "-h" || arg == "--help") {
+            printHelp();
+            return 0;
         } else {
             // Парсинг операндов
             try {
@@ -73,7 +91,7 @@ int main(int argc, char* argv[]) {
     // Проверка наличия операции
     if (operation.empty()) {
         cerr << "Ошибка: не указана операция. Используйте --operation или -o" << endl;
-        printHelp();
+        cerr << "Используйте -h или --help для просмотра справки" << endl;
         return 1;
     }
 
@@ -81,7 +99,7 @@ int main(int argc, char* argv[]) {
     if (operands.size() < 5 || operands.size() > 7) {
         cerr << "Ошибка: количество операндов должно быть от 5 до 7. Получено: " 
                   << operands.size() << endl;
-        cerr << "Используйте --help для просмотра справки" << endl;
+        cerr << "Используйте -h или --help для просмотра справки" << endl;
         return 1;
     }
 
@@ -106,6 +124,7 @@ int main(int argc, char* argv[]) {
     } else {
         cerr << "Ошибка: неизвестная операция: " << operation << endl;
         cerr << "Поддерживаемые операции: summa, subtract" << endl;
+        cerr << "Используйте -h или --help для просмотра справки" << endl;
         return 1;
     }
 
